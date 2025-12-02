@@ -10,7 +10,7 @@ public class Square_script : MonoBehaviour
     public Text dane;
     public GameObject hill, ground, cameraObject;
     public InputField velocity_in, angle_in, friction_in;
-    double velocity, Vp, old_v, friction_factor, a, max_s, s;
+    double velocity, Vp, old_v, friction_factor, a, max_s, s, iteration;
     float angle;
     double g = 9.80665f;
     Vector3 start_camera_vector = new Vector3(7, 4, -10);
@@ -32,7 +32,8 @@ public class Square_script : MonoBehaviour
       {
             dane.text = "Vp: " + Vp.ToString("n1") + "\n" +
             "Kąt: " + angle.ToString("n0") + "\n" +
-            "μ: " + friction_factor.ToString("n2") + "\n"
+            "μ: " + friction_factor.ToString("n2") + "\n" +
+            "Idx: " + iteration.ToString()
             ;
 
       }
@@ -62,6 +63,7 @@ public class Square_script : MonoBehaviour
       void Reset()
     {
         GetDane();
+        iteration = 0;
         velocity = Vp;
         transform.eulerAngles = new Vector3(0f, 0f, angle);
         hill.transform.eulerAngles = new Vector3(0f, 0f, angle);
@@ -87,8 +89,10 @@ public class Square_script : MonoBehaviour
             {
                 velocity *= -1;
                 a = GetAccUp();
+                iteration += 1;
                 max_s = 0;
                 s = 0;
+                ShowDane();
             }
         if (old_v > 0 && velocity < 0)
             {
