@@ -47,7 +47,7 @@ public class EndingScript : MonoBehaviour
                         + "\nWprowadŸ ponownie dane i wciœnij 'p' aby uruchomiæ ponownie";
         FinalText.gameObject.SetActive(true);
         wasshown = true;
-        Debug.Log("EndingScript: OnSquareStopped wywo³ane.");
+        
     }
 
     private void OnSquareStarted()
@@ -55,7 +55,7 @@ public class EndingScript : MonoBehaviour
         if (FinalText == null) return;
         FinalText.gameObject.SetActive(false);
         wasshown = false;
-        Debug.Log("EndingScript: OnSquareStarted wywo³ane.");
+        
     }
 
     // zachowujemy Update() jako dodatkowe zabezpieczenie (opcjonalne)
