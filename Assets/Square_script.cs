@@ -13,8 +13,14 @@ public class Square_script : MonoBehaviour
     public double velocity, Vp, old_v, friction_factor, a, max_s, s, iteration;
     float angle;
     double g = 9.80665f;
+ 
     Vector3 start_camera_vector = new Vector3(7, 4, -10);
 
+    void StopSquare()
+    {
+        velocity = 0;
+        a = 0;
+    }
     double Rad(double angle_stp)
       {
             return angle_stp * Math.PI / 180;
@@ -50,6 +56,7 @@ public class Square_script : MonoBehaviour
             if (angle > 90) angle = 90;
             if (friction_factor < 0) friction_factor = 0;
             if (friction_factor > 1) friction_factor = 1;
+
 
             ShowDane();
         
@@ -109,7 +116,7 @@ public class Square_script : MonoBehaviour
            
         if (velocity < 0 && max_s < SEPS)
             {
-                Reset();
+            StopSquare();
             }
         else
             {
