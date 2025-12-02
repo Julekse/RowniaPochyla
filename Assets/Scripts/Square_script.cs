@@ -19,7 +19,7 @@ public class Square_script : MonoBehaviour
     public event Action OnStopped;
     public event Action OnStarted;
 
-    Vector3 start_camera_vector = new Vector3(8.0f, 4.0f, -10.0f);
+    Vector3 start_camera_vector = new Vector3(7.0f, 4.0f, -10.0f);
 
     void StopSquare()
     {
