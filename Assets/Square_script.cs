@@ -10,7 +10,7 @@ public class Square_script : MonoBehaviour
     public Text dane;
     public GameObject hill, ground, cameraObject;
     public InputField velocity_in, angle_in, friction_in;
-    double velocity, Vp, old_v, friction_factor, a, max_s, s, iteration;
+    public double velocity, Vp, old_v, friction_factor, a, max_s, s, iteration;
     float angle;
     double g = 9.80665f;
     Vector3 start_camera_vector = new Vector3(7, 4, -10);
