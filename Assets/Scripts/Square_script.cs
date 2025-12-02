@@ -19,7 +19,7 @@ public class Square_script : MonoBehaviour
     public event Action OnStopped;
     public event Action OnStarted;
 
-    Vector3 start_camera_vector = new Vector3(7, 4, -10);
+    Vector3 start_camera_vector = new Vector3(8.0f, 4.0f, -10.0f);
 
     void StopSquare()
     {
@@ -83,7 +83,7 @@ public class Square_script : MonoBehaviour
         transform.eulerAngles = new Vector3(0f, 0f, angle);
         hill.transform.eulerAngles = new Vector3(0f, 0f, angle);
         ground.transform.position = new Vector3(0f, -5.61f - GetTouchHeight(), -0.1f);
-        cameraObject.transform.position = new Vector3(8f, 4f, -10f);
+        cameraObject.transform.position = start_camera_vector;
         a = GetAccUp();
         max_s = 0;
         s = 0;
@@ -119,15 +119,9 @@ public class Square_script : MonoBehaviour
             old_v = 0;
         }
 
-        if (a > 0)
+        if ((velocity < 0 && max_s < SEPS) || a>0)
         {
-            a = 0;
             old_v = 0;
-            velocity = 0;
-        }
-
-        if (velocity < 0 && max_s < SEPS)
-        {
             StopSquare();
         }
         else
@@ -154,7 +148,7 @@ public class Square_script : MonoBehaviour
         transform.position = new_pos;
         hill.transform.position = new_pos;
         ground.transform.position = new Vector3(transform.position.x, -5.61f - GetTouchHeight(), -0.1f);
-        float screen_ratio = Screen.width / Screen.height;
+        float screen_ratio = 1.0f * Screen.width / Screen.height;
         if (transform.position.x + GetTouchHeight() > start_camera_vector.x + (5 * screen_ratio))
             cameraObject.transform.position = start_camera_vector + new Vector3(transform.position.x + GetTouchHeight() - start_camera_vector.x - (5 * screen_ratio), 0, 0);
         if (transform.position.y + GetTouchHeight() > start_camera_vector.y + 5)
