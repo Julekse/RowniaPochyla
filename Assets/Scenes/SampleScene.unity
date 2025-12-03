@@ -1751,15 +1751,17 @@ MonoBehaviour:
   velocity_in: {fileID: 1504765762}
   angle_in: {fileID: 791413853}
   friction_in: {fileID: 1994923616}
-  velocity: 0
   Vp: 0
-  old_v: 0
+  Current_Vp: 0
   friction_factor: 0
-  a: 0
   max_s: 0
   s: 0
   iteration: 0
+  time_passed: 0
   isstopped: 0
+  ap: 0
+  ad: 0
+  q: 0
   EPS: 0.15
   SEPS: 0.1
 --- !u!212 &1939023562
@@ -2249,7 +2251,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 0.0047169924, b: 0.09592093, a: 1}
+  m_Color: {r: 0, g: 0, b: 0, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1

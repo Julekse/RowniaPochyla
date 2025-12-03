@@ -1,5 +1,7 @@
 using System;
+using NUnit.Framework;
 using Unity.Collections;
+using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
@@ -10,7 +12,7 @@ public class Square_script : MonoBehaviour
     public Text dane;
     public GameObject hill, ground, cameraObject;
     public InputField velocity_in, angle_in, friction_in;
-    public double velocity, Vp, old_v, friction_factor, a, max_s, s, iteration;
+    public double Vp, Current_Vp, friction_factor, max_s, s, iteration, time_passed;
     float angle;
     public bool isstopped = false;
     double g = 9.80665f;
@@ -23,8 +25,6 @@ public class Square_script : MonoBehaviour
 
     void StopSquare()
     {
-        velocity = 0;
-        a = 0;
         if (!isstopped)
         {
             isstopped = true;
@@ -44,6 +44,28 @@ public class Square_script : MonoBehaviour
     double GetAccDown()
     {
         return -g * (Math.Sin(Rad(angle)) - (friction_factor * Math.Cos(Rad(angle))));
+    }
+
+    double GetDistance(double t, double Vo)
+    {
+        double p, q, V2, t_max, wsp_a, ap, ad;
+        ap = GetAccUp();
+        ad = GetAccDown();
+        p = -Vo/ap;
+        if (time_passed < p)
+        {
+            return ap/2*t*t + Vo * t;
+        }
+        q = -Vo*Vo / (2*ap);
+        if (ad > 0)
+        {
+            StopSquare();
+            return q;
+        }
+        V2 = Math.Sqrt(2 * g * q);
+        t_max = V2/ad;
+        wsp_a = V2/(2*(t_max-p));
+        return wsp_a * (t-p)*(t-p) + q;
     }
 
     void ShowDane()
@@ -79,12 +101,12 @@ public class Square_script : MonoBehaviour
     {
         GetDane();
         iteration = 0;
-        velocity = Vp;
+        time_passed = 0;
+        Current_Vp = Vp;
         transform.eulerAngles = new Vector3(0f, 0f, angle);
         hill.transform.eulerAngles = new Vector3(0f, 0f, angle);
         ground.transform.position = new Vector3(0f, -5.61f - GetTouchHeight(), -0.1f);
         cameraObject.transform.position = start_camera_vector;
-        a = GetAccUp();
         max_s = 0;
         s = 0;
 
@@ -102,47 +124,40 @@ public class Square_script : MonoBehaviour
 
     public float EPS = 0.01f, SEPS = 0.1f;
 
+    double GetNewVelocity()
+      {
+        return math.sqrt((Math.Sin(Rad(angle)) - (friction_factor * Math.Cos(Rad(angle))))/(Math.Sin(Rad(angle)) + (friction_factor * Math.Cos(Rad(angle)))));
+      }
+
     void MoveSquare()
     {
-        if (s < 0)
-        {
-            velocity *= -1;
-            a = GetAccUp();
-            iteration += 1;
-            max_s = 0;
-            s = 0;
-            ShowDane();
-        }
-        if (old_v > 0 && velocity < 0)
-        {
-            a = GetAccDown();
-            old_v = 0;
-        }
+        if (isstopped) return;
 
-        if ((velocity < 0 && max_s < SEPS) || a>0)
-        {
-            old_v = 0;
-            StopSquare();
-        }
-        else
-        {
-            old_v = velocity;
-            velocity += a * Time.deltaTime;
-            // jeśli wcześniej była flaga zatrzymania, a ruch wznowiony -> sygnalizuj start
-            if (isstopped && Math.Abs(velocity) > EPS)
+        time_passed += Time.deltaTime;
+
+        if (s < 0)
+            {
+                  Current_Vp *= GetNewVelocity();
+                  time_passed = 0;
+                  iteration += 1;
+                  max_s = 0;
+                  ShowDane();
+            }
+
+        if (!isstopped && Current_Vp < EPS)
+            {
+                StopSquare();
+            }
+
+        if (isstopped && Current_Vp > EPS)
             {
                 isstopped = false;
                 OnStarted?.Invoke();
              
             }
-        }
 
-        s += (float)velocity * Time.deltaTime;
-
-        if (s > max_s)
-        {
-            max_s = s;
-        }
+        s = GetDistance(time_passed, Current_Vp);
+        if (max_s < s) max_s = s;
 
         Vector3 new_pos = new Vector3((float)(s * Math.Cos(Rad(angle))), (float)(s * Math.Sin(Rad(angle))), 0);
         transform.position = new_pos;
