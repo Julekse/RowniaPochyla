@@ -64,7 +64,7 @@ public class Square_script : MonoBehaviour
         }
         V2 = Math.Sqrt(2 * g * q);
         t_max = V2/ad;
-        wsp_a = V2/(2*(t_max-p));
+        wsp_a = V2/(t_max-p);
         return wsp_a * (t-p)*(t-p) + q;
     }
 
