@@ -103,12 +103,14 @@ public class Square_script : MonoBehaviour
         iteration = 0;
         time_passed = 0;
         Current_Vp = Vp;
+        max_s = 0;
+        s = 0;
+
         transform.eulerAngles = new Vector3(0f, 0f, angle);
         hill.transform.eulerAngles = new Vector3(0f, 0f, angle);
         ground.transform.position = new Vector3(0f, -5.61f - GetTouchHeight(), -0.1f);
         cameraObject.transform.position = start_camera_vector;
-        max_s = 0;
-        s = 0;
+        
 
         // jeśli wcześniej było zatrzymane, sygnalizujemy wznowienie
         if (isstopped)
