@@ -10,6 +10,7 @@ public class EndingScript : MonoBehaviour
 
     void Start()
     {
+        FinalText.gameObject.SetActive(false);
         if (squareScript == null)
             squareScript = FindObjectOfType<Square_script>();
 

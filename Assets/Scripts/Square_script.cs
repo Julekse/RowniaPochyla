@@ -48,7 +48,7 @@ public class Square_script : MonoBehaviour
 
     double GetDistance(double t, double Vo)
     {
-        double p, q, V2, t_max, wsp_a, ap, ad;
+        double p, q, ap, ad;
         ap = GetAccUp();
         ad = GetAccDown();
         p = -Vo/ap;
@@ -62,10 +62,7 @@ public class Square_script : MonoBehaviour
             StopSquare();
             return q;
         }
-        V2 = Math.Sqrt(2 * g * q);
-        t_max = V2/ad;
-        wsp_a = V2/(t_max-p);
-        return wsp_a * (t-p)*(t-p) + q;
+        return ad/2 * (t-p)*(t-p) + q;
     }
 
     void ShowDane()
@@ -112,12 +109,8 @@ public class Square_script : MonoBehaviour
         cameraObject.transform.position = start_camera_vector;
         
 
-        // jeśli wcześniej było zatrzymane, sygnalizujemy wznowienie
-        if (isstopped)
-        {
-            isstopped = false;
-            OnStarted?.Invoke();
-        }
+        isstopped = false;
+        OnStarted?.Invoke();
 
         ShowDane();
     }
@@ -128,7 +121,7 @@ public class Square_script : MonoBehaviour
 
     double GetNewVelocity()
       {
-        return math.sqrt((Math.Sin(Rad(angle)) - (friction_factor * Math.Cos(Rad(angle))))/(Math.Sin(Rad(angle)) + (friction_factor * Math.Cos(Rad(angle)))));
+        return math.sqrt(GetAccDown()/GetAccUp());
       }
 
     void MoveSquare()
