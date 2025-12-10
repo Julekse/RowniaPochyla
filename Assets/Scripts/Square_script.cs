@@ -21,7 +21,7 @@ public class Square_script : MonoBehaviour
     public event Action OnStopped;
     public event Action OnStarted;
 
-    Vector3 start_camera_vector = new Vector3(7.0f, 2.0f, -10.0f);
+    public Vector3 start_camera_vector = new Vector3(7.0f, 2.0f, -10.0f);
 
     void StopSquare()
     {
@@ -37,7 +37,7 @@ public class Square_script : MonoBehaviour
     {
         return angle_stp * Math.PI / 180;
     }
-    double GetAccUp()
+    public double GetAccUp()
     {
         return -g * (Math.Sin(Rad(angle)) + (friction_factor * Math.Cos(Rad(angle))));
     }
