@@ -312,6 +312,7 @@ MonoBehaviour:
   time_passed: 0
   s_max: 0
   square_script: {fileID: 1939023561}
+  main_camera: {fileID: 519420028}
 --- !u!120 &387899031
 LineRenderer:
   serializedVersion: 2
@@ -367,8 +368,8 @@ LineRenderer:
       serializedVersion: 2
       m_Curve:
       - serializedVersion: 3
-        time: 1
-        value: 0.49056643
+        time: 0
+        value: 0.5033053
         inSlope: 0
         outSlope: 0
         tangentMode: 0
