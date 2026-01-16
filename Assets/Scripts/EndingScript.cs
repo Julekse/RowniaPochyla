@@ -1,38 +1,37 @@
 using UnityEngine;
 using UnityEngine.UI;
-using System;
 
 public class EndingScript : MonoBehaviour
 {
-    public Text FinalText;
-    public Square_script squareScript;
-    bool wasshown = false;
+    [Header("UI Components")]
+    public Text finalText;
 
-    void Start()
+    [Header("References")]
+    [SerializeField] private Square_script squareScript;
+
+    private void Start()
     {
-        FinalText.gameObject.SetActive(false);
         if (squareScript == null)
-            squareScript = FindObjectOfType<Square_script>();
+            squareScript = FindFirstObjectByType<Square_script>();
 
-        if (FinalText == null)
-            FinalText = GetComponent<Text>() ?? GetComponentInChildren<Text>();
+        if (finalText == null)
+            finalText = GetComponent<Text>() ?? GetComponentInChildren<Text>();
 
-        if (FinalText != null)
-            FinalText.gameObject.SetActive(false);
+        if (finalText != null)
+            finalText.gameObject.SetActive(false);
 
         if (squareScript != null)
         {
-            // subskrybuj eventy
             squareScript.OnStopped += OnSquareStopped;
             squareScript.OnStarted += OnSquareStarted;
         }
         else
         {
-            Debug.LogWarning("EndingScript: Nie znaleziono Square_script w Start()", this);
+            Debug.LogError("EndingScript: Brak poÅ‚Ä…czenia do Square_script!", this);
         }
     }
 
-    void OnDestroy()
+    private void OnDestroy()
     {
         if (squareScript != null)
         {
@@ -43,26 +42,20 @@ public class EndingScript : MonoBehaviour
 
     private void OnSquareStopped()
     {
-        if (FinalText == null) return;
-        FinalText.text = "Koniec!\nLiczba odbiæ: " + (squareScript != null ? squareScript.iteration.ToString("n0") : "0")
-                        + "\nWprowadŸ ponownie dane i wciœnij 'p' aby uruchomiæ ponownie";
-        FinalText.gameObject.SetActive(true);
-        wasshown = true;
+        if (finalText == null || squareScript == null) return;
+
+        finalText.text = $"Koniec!\n" +
+                         $"Liczba odbiÄ‡: {squareScript.iteration:n0}\n" +
+                         $"WprowadÅº ponownie dane i wciÅ›nij 'P', aby uruchomiÄ‡ ponownie";
         
+        finalText.gameObject.SetActive(true);
     }
 
     private void OnSquareStarted()
     {
-        if (FinalText == null) return;
-        FinalText.gameObject.SetActive(false);
-        wasshown = false;
-        
-    }
-
-    // zachowujemy Update() jako dodatkowe zabezpieczenie (opcjonalne)
-    void Update()
-    {
-        if (squareScript == null)
-            squareScript = FindObjectOfType<Square_script>();
+        if (finalText != null)
+        {
+            finalText.gameObject.SetActive(false);
+        }
     }
 }
